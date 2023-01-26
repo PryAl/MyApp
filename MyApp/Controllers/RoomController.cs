@@ -1,6 +1,7 @@
-﻿using Domain.Dto;
+﻿using BusinessLogic;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Dto;
 
 namespace WebApp.Controllers
 {
@@ -8,30 +9,19 @@ namespace WebApp.Controllers
     [Route("[controller]")]
     public class RoomController : ControllerBase
     {
-        private static List<RoomEntity> rooms = new List<RoomEntity>(new[] {
-            new RoomEntity() { Id = 1, Name = "Kitchen", Floor = 1, Temperature = 20, Humidity = 80 },
-            new RoomEntity() { Id = 2, Name = "Living room", Floor = 1, Temperature = 22, Humidity = 75 },
-            new RoomEntity() { Id = 3, Name = "Hallway", Floor = 1, Temperature = 19, Humidity = 75 },
-            new RoomEntity() { Id = 4, Name = "Bedroom", Floor = 2, Temperature = 21, Humidity = 70 }
-        });
-
-        private int NextRoomId => rooms.Count() == 0 ? 1 : rooms.Max(r => r.Id) + 1;
+        private readonly IRoomService _service;
+        public RoomController(IRoomService service)
+        {
+            _service = service;
+        }
 
         [HttpGet]
-        public IActionResult Get() => Ok(rooms);
+        public IActionResult Get() => Ok(_service.GetRooms());
         
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var room = rooms.Where(r => r.Id == id).Select(r =>
-                new RoomDto()
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    Floor = r.Floor,
-                    Temperature = r.Temperature,
-                    Humidity = r.Humidity
-                }).FirstOrDefault();
+            var room = _service.GetRoomById(id);
 
             if (room == null)
             {
@@ -41,43 +31,54 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(RoomEntity room)
+        public ActionResult<RoomDto> PostRoom(RoomDto room)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            room.Id = NextRoomId;
-            rooms.Add(room);
-            return CreatedAtAction(nameof(Get), new { id = room.Id }, room);
+            return Ok(_service.AddRoom(new RoomEntity
+            {
+                Id = room.Id,
+                Name=room.Name,
+                Floor=room.Floor,
+                Temperature=room.Temperature,
+                Humidity=room.Humidity,
+                Light = room.Light
+            }));
         }
-
-        [HttpPost("AddRoom")]
-        public IActionResult PostBody([FromBody] RoomEntity room) => Post(room);
 
         [HttpPut]
         public IActionResult Put(RoomDto room)
         {
-            if(!ModelState.IsValid)
+            RoomEntity entry = new RoomEntity
             {
-                return BadRequest(ModelState);
+                Id = room.Id,
+                Name = room.Name,
+                Temperature = room.Temperature,
+                Humidity = room.Humidity,
+                Floor = room.Floor,
+                Light = room.Light
+            };
+            var result = _service.UpdateRoom(entry);
+            if (result != null)
+            {
+                return Ok(result);
             }
-            var storedRoom = rooms.FirstOrDefault(r => r.Id == room.Id);
-            if (storedRoom == null)
-                return NotFound();
-            storedRoom.Name = room.Name;
-            storedRoom.Temperature = room.Temperature;
-            storedRoom.Humidity = room.Humidity;
-
-            return Ok(storedRoom);
+            return BadRequest();
         }
 
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            rooms.Remove(rooms.SingleOrDefault(r => r.Id == id));
-            return Ok();
+            var result = _service.DeleteRoom(id);
+            if(result != null)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest();
         }
     }
 }
