@@ -1,6 +1,7 @@
 using BusinessLogic;
 using BusinessLogic.Services;
 using DataAccess;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +16,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //DB
-builder.Services.AddDbContext<RoomDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+builder.Services.AddDbContext<MyDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
     b => b.MigrationsAssembly("WebApp")));
 
-builder.Services.AddScoped<IRoomService, RoomService>();
-builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IEntityService<Premise>, PremiseService>();
+builder.Services.AddScoped<IEntityService<Room>, RoomService>();
+builder.Services.AddScoped<IEntityService<Device>, DeviceService>();
+builder.Services.AddScoped<IEntityRepository<Premise>, PremiseRepository>();
+builder.Services.AddScoped<IEntityRepository<Room>, RoomRepository>();
+builder.Services.AddScoped<IEntityRepository<Device>, DeviceRepository>();
 
 var app = builder.Build();
 

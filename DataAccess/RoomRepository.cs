@@ -2,65 +2,37 @@
 
 namespace DataAccess
 {
-    public class RoomRepository : IRoomRepository
+    public class RoomRepository : IEntityRepository<Room>
     {
-        private readonly RoomDbContext _roomDbContext;
-        public RoomRepository(RoomDbContext roomDbContext)
+        private readonly MyDbContext _myDbContext;
+        public RoomRepository(MyDbContext myDbContext)
         {
-            _roomDbContext = roomDbContext;
+            _myDbContext = myDbContext;
         }
 
-        public RoomEntity AddRoom(RoomEntity room)
+        public Room GetById(int id)
         {
-            _roomDbContext.Rooms.Add(room);
-            _roomDbContext.SaveChanges();
-            return room;
+            throw new NotImplementedException();
         }
 
-        public RoomEntity? DeleteRoom(int id)
+        public List<Room> GetAll()
         {
-            var room = _roomDbContext.Rooms.FirstOrDefault(r => r.Id == id);
-            if (room != null)
-            {
-                _roomDbContext.Rooms.Remove(room);
-                _roomDbContext.SaveChanges();
-
-                return room;
-            }
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public RoomEntity? GetRoomById(int id)
+        public Room Create(Room entity)
         {
-            return _roomDbContext.Rooms.FirstOrDefault(r => r.Id == id);
+            throw new NotImplementedException();
         }
 
-        public List<RoomEntity> GetRooms()
+        public Room Update(Room entity)
         {
-            return _roomDbContext.Rooms.ToList();
+            throw new NotImplementedException();
         }
 
-        public RoomEntity? UpdateRoom(RoomEntity room)
+        public Room Delete(int id)
         {
-            var exRoom = _roomDbContext.Rooms.FirstOrDefault(r => r.Id == room.Id);
-
-            if (exRoom != null)
-            {
-                exRoom.Id = room.Id;
-                exRoom.Name = room.Name;
-                exRoom.Floor = room.Floor;
-                exRoom.Temperature = room.Temperature;
-                exRoom.Humidity = room.Humidity;
-                exRoom.Light = room.Light;
-
-                _roomDbContext.SaveChanges();
-                return exRoom;
-            }
-            else
-            {
-                return null;
-            }
+            throw new NotImplementedException();
         }
     }
 }

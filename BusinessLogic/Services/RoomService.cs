@@ -3,39 +3,37 @@ using Domain.Entities;
 
 namespace BusinessLogic.Services
 {
-    public class RoomService : IRoomService
+    public class RoomService : IEntityService<Room>
     {
-        private readonly IRoomRepository _roomRepository;
-
-        public RoomService(IRoomRepository roomRepository)
+        private readonly IEntityRepository<Room> _roomRepository;
+        public RoomService(IEntityRepository<Room> roomRepository)
         {
             _roomRepository = roomRepository;
         }
 
-        public RoomEntity AddRoom(RoomEntity room)
+        public Room GetById(int id)
         {
-            _roomRepository.AddRoom(room);
-            return room;
+            throw new NotImplementedException();
         }
 
-        public RoomEntity DeleteRoom(int id)
+        public List<Room> GetAll()
         {
-            return _roomRepository.DeleteRoom(id);
+            throw new NotImplementedException();
         }
 
-        public RoomEntity GetRoomById(int id)
+        public Room Create(Room entity)
         {
-            return _roomRepository.GetRoomById(id);
+            throw new NotImplementedException();
         }
 
-        public List<RoomEntity> GetRooms()
+        public Room Update(Room entity)
         {
-            return _roomRepository.GetRooms();
+            throw new NotImplementedException();
         }
 
-        public RoomEntity UpdateRoom(RoomEntity room)
+        public Room Delete(int id)
         {
-            return _roomRepository.UpdateRoom(room);
+            throw new NotImplementedException();
         }
     }
 }

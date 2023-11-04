@@ -7,21 +7,21 @@ namespace WebApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RoomController : ControllerBase
+    public class RoomsController : ControllerBase
     {
-        private readonly IRoomService _service;
-        public RoomController(IRoomService service)
+        private readonly IEntityService<Room> _roomService;
+        public RoomsController(IEntityService<Room> roomService)
         {
-            _service = service;
+            _roomService = roomService;
         }
 
-        [HttpGet]
-        public IActionResult Get() => Ok(_service.GetRooms());
+        [HttpGet("GetAll")]
+        public IActionResult Get() => Ok(_roomService.GetAll());
         
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var room = _service.GetRoomById(id);
+            var room = _roomService.GetById(id);
 
             if (room == null)
             {
@@ -37,30 +37,22 @@ namespace WebApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-            return Ok(_service.AddRoom(new RoomEntity
+            return Ok(_roomService.Create(new Room
             {
                 Id = room.Id,
                 Name=room.Name,
-                Floor=room.Floor,
-                Temperature=room.Temperature,
-                Humidity=room.Humidity,
-                Light = room.Light
             }));
         }
 
         [HttpPut]
         public IActionResult Put(RoomDto room)
         {
-            RoomEntity entry = new RoomEntity
+            Room entry = new Room
             {
                 Id = room.Id,
                 Name = room.Name,
-                Temperature = room.Temperature,
-                Humidity = room.Humidity,
-                Floor = room.Floor,
-                Light = room.Light
             };
-            var result = _service.UpdateRoom(entry);
+            var result = _roomService.Update(entry);
             if (result != null)
             {
                 return Ok(result);
@@ -72,7 +64,7 @@ namespace WebApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var result = _service.DeleteRoom(id);
+            var result = _roomService.Delete(id);
             if(result != null)
             {
                 return Ok(result);
