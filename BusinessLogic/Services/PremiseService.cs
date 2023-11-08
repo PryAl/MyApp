@@ -24,7 +24,7 @@ public class PremiseService : IEntityService<Premise>
 
     public Premise Create(Premise entity)
     {
-        throw new NotImplementedException();
+        return _premiseRepository.Create(entity);
     }
 
     public Premise Update(Premise entity)

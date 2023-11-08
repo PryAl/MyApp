@@ -14,7 +14,7 @@ public class DeviceService : IEntityService<Device>
 
     public Device GetById(int id)
     {
-        throw new NotImplementedException();
+        return _deviceRepository.GetById(id);
     }
 
     public List<Device> GetAll()
@@ -24,7 +24,7 @@ public class DeviceService : IEntityService<Device>
 
     public Device Create(Device entity)
     {
-        throw new NotImplementedException();
+        return _deviceRepository.Create(entity);
     }
 
     public Device Update(Device entity)

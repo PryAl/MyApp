@@ -3,6 +3,7 @@ using BusinessLogic.Services;
 using DataAccess;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Mapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 //DB
 builder.Services.AddDbContext<MyDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),

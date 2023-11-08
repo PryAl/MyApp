@@ -23,7 +23,7 @@ namespace BusinessLogic.Services
 
         public Room Create(Room entity)
         {
-            throw new NotImplementedException();
+            return _roomRepository.Create(entity);
         }
 
         public Room Update(Room entity)

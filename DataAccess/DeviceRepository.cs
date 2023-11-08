@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.DeviceTypes;
 
 namespace DataAccess;
 
@@ -22,7 +23,20 @@ public class DeviceRepository : IEntityRepository<Device>
 
     public Device Create(Device entity)
     {
-        throw new NotImplementedException();
+        switch (entity)
+        {
+            case Luminaire luminaire:
+                _dbContext.Luminaires.Add(luminaire);
+                break;
+            case Socket socket:
+                _dbContext.Sockets.Add(socket);
+                break;
+            case Thermostat termostate:
+                _dbContext.Thermostats.Add(termostate);
+                break;
+        }
+        _dbContext.SaveChanges();
+        return entity;
     }
 
     public Device Update(Device entity)

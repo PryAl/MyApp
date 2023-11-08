@@ -1,4 +1,5 @@
-﻿using BusinessLogic;
+﻿using AutoMapper;
+using BusinessLogic;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Dto;
@@ -10,9 +11,12 @@ namespace WebApp.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly IEntityService<Room> _roomService;
-        public RoomsController(IEntityService<Room> roomService)
+        private readonly IMapper _mapper;
+
+        public RoomsController(IEntityService<Room> roomService, IMapper mapper)
         {
             _roomService = roomService;
+            _mapper = mapper;
         }
 
         [HttpGet("GetAll")]
@@ -31,32 +35,18 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<RoomDto> PostRoom(RoomDto room)
+        public ActionResult<RoomDto> Create(RoomDto newRoom)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(_roomService.Create(new Room
-            {
-                Id = room.Id,
-                Name=room.Name,
-            }));
+            return Ok(_roomService.Create(_mapper.Map<Room>(newRoom)));
         }
 
         [HttpPut]
         public IActionResult Put(RoomDto room)
         {
-            Room entry = new Room
-            {
-                Id = room.Id,
-                Name = room.Name,
-            };
-            var result = _roomService.Update(entry);
-            if (result != null)
-            {
-                return Ok(result);
-            }
             return BadRequest();
         }
 

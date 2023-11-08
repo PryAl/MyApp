@@ -22,7 +22,9 @@ public class PremiseRepository : IEntityRepository<Premise>
 
     public Premise Create(Premise entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Premises.Add(entity);
+        _dbContext.SaveChanges();
+        return entity;
     }
 
     public Premise Update(Premise entity)

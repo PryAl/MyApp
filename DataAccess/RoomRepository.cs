@@ -22,7 +22,9 @@ namespace DataAccess
 
         public Room Create(Room entity)
         {
-            throw new NotImplementedException();
+            _myDbContext.Rooms.Add(entity);
+            _myDbContext.SaveChanges();
+            return entity;
         }
 
         public Room Update(Room entity)
