@@ -24,7 +24,7 @@ public class DeviceService : IEntityService<Device>
 
     public Device Create(Device entity)
     {
-        throw new NotImplementedException();
+        return _deviceRepository.Create(entity);
     }
 
     public Device Update(Device entity)

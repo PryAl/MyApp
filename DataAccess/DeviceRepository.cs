@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.DeviceTypes;
 
 namespace DataAccess;
 
@@ -22,7 +23,9 @@ public class DeviceRepository : IEntityRepository<Device>
 
     public Device Create(Device entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Sockets.Add(entity as Socket);
+        _dbContext.SaveChanges();
+        return entity;
     }
 
     public Device Update(Device entity)
